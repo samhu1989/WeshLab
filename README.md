@@ -1,2 +1,2 @@
 # WeshLab
- Web Based MeshLab
+ A web-based MeshLab started from threejs editor
