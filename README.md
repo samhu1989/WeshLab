@@ -1,2 +1,2 @@
 # WeshLab
- A web-based MeshLab started from threejs editor
+ A web-based MeshLab started from [three.js]: https://github.com/mrdoob/three.js/ editor
