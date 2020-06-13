@@ -236,6 +236,24 @@ var UIPanel = function () {
 UIPanel.prototype = Object.create( UIElement.prototype );
 UIPanel.prototype.constructor = UIPanel;
 
+// UIPanel
+
+var UIPanel = function () {
+
+	UIElement.call( this );
+
+	var dom = document.createElement( 'div' );
+	dom.className = 'Panel';
+
+	this.dom = dom;
+
+	return this;
+
+};
+
+UIPanel.prototype = Object.create( UIElement.prototype );
+UIPanel.prototype.constructor = UIPanel;
+
 // UIText
 
 var UIText = function ( text ) {
@@ -1347,4 +1365,103 @@ UIListbox.ListboxItem = function ( parent ) {
 UIListbox.ListboxItem.prototype = Object.create( UIElement.prototype );
 UIListbox.ListboxItem.prototype.constructor = UIListbox.ListboxItem;
 
-export { UIElement, UISpan, UIDiv, UIRow, UIPanel, UIText, UIInput, UITextArea, UISelect, UICheckbox, UIColor, UINumber, UIInteger, UIBreak, UIHorizontalRule, UIButton, UITabbedPanel, UIListbox };
+/**
+ * @author samhu1989
+ */
+
+var UIDialog = function(){
+	UIElement.call( this );
+	var dom = document.createElement( 'div' );
+	dom.className = 'Dialog';
+	this.dom = dom;
+    //
+    var titlebar= document.createElement("div");
+    var title = document.createElement("span");
+    var titleimg = document.createElement("span");
+    var titleclose = document.createElement("span");
+    var closeaction = document.createElement("button");
+    //
+    this.title = title;
+    titlebar.appendChild(titleimg);
+    titlebar.appendChild(title);
+    titlebar.appendChild(titleclose);
+    titleclose.appendChild(closeaction);
+    //
+    var body = document.createElement("div");
+    //
+    dom.appendChild(titlebar);
+    dom.appendChild(body);
+    this.body = body;
+    var ismousedown = false;
+    this.ismousedown = ismousedown;
+    var left = parseInt(this.dom.style.left);
+    this.left = left;
+    var top = parseInt(this.dom.style.top);
+    this.top = top;
+    var downX = 0;
+    this.downX = downX;
+    var downY = 0;
+    this.downY = downY;
+    this.width = 320;
+    this.height = 240;
+    
+    var templeft,temptop,tempheight
+    var cssText,bodycssText;//拼出dialog和dialogbody的样式字符串
+    templeft = (document.body.clientWidth-this.width)/2;
+    temptop = (document.body.clientHeight-this.height)/2;
+    tempheight= this.height-30;
+    cssText= "position:absolute;background:#65c294;padding:1px;border:4px;top:"+temptop+"px;left:"+templeft+"px;height:"+this.height+"px;width:"+this.width+"px;";
+    bodycssText = "width:100%;background:#ffffff;"+"height:" + tempheight + "px;";
+    this.dom.style.cssText = cssText;
+    titlebar.style.cssText = "height:30px;width:100%;background:url(editor/images/titlebar.png) repeat;cursor:move;";
+    body.style.cssText  = bodycssText;
+    titleimg.style.cssText = "float:left;height:20px;width:20px;background:url(editor/images/icon.png);"+"display:block;margin:4px;line-height:20px;";
+    title.style.cssText = "font-size:16px;float:left;display:block;margin:4px;line-height:20px;";
+    titleclose.style.cssText  = "float:right;display:block;margin:4px;line-height:20px;";
+    closeaction.style.cssText = "height:20px;width:24px;border-width:1px;"+"background-image:url(editor/images/close.png);cursor:pointer;";
+    
+    
+    var OnClose = function(event){
+        dom.parentNode.removeChild(dom);
+    }
+    
+    var OnMouseMove = function(event){
+        if(ismousedown){
+            dom.style.top = event.clientY - downY + top + "px";
+            dom.style.left = event.clientX - downX + left + "px";
+        }
+    }
+    
+    var OnMouseUp = function(event){
+        if(ismousedown){
+            dom.style.top = event.clientY - downY + top + "px";
+            dom.style.left = event.clientX - downX + left + "px";
+        }
+    }
+    
+    var OnMouseDown = function(event){
+        ismousedown = true;
+        downX = event.clientX;
+        downY = event.clientY;
+        document.addEventListener("mousemove",OnMouseMove,false);
+        document.addEventListener("mouseup",OnMouseUp,false);
+    }
+        
+    titlebar.addEventListener("mousedown",OnMouseDown,false);
+    closeaction.addEventListener("click",OnClose,false);
+    document.body.appendChild(dom);
+	return this;
+}
+
+UIDialog.prototype = Object.create( UIElement.prototype );
+UIDialog.prototype.constructor = UIDialog;
+
+UIDialog.prototype.mask = function(){
+    
+}
+
+UIDialog.prototype.setTitle = function( title ){
+    this.title.innerHTML = title;
+}
+
+export { UIElement, UISpan, UIDiv, UIRow, UIPanel, UIText, UIInput, UITextArea, UISelect, UICheckbox, UIColor, UINumber, UIInteger, UIBreak, UIHorizontalRule, UIButton, UITabbedPanel, UIListbox, UIDialog };
