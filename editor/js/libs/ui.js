@@ -1376,14 +1376,15 @@ var UIDialog = function(){
 	this.dom = dom;
     //
     var titlebar= document.createElement("div");
-    var title = document.createElement("span");
+    this.titlebar = titlebar;
+    var titletxt = document.createElement("span");
+    this.titletxt = titletxt;
     var titleimg = document.createElement("span");
     var titleclose = document.createElement("span");
     var closeaction = document.createElement("button");
     //
-    this.title = title;
     titlebar.appendChild(titleimg);
-    titlebar.appendChild(title);
+    titlebar.appendChild(titletxt);
     titlebar.appendChild(titleclose);
     titleclose.appendChild(closeaction);
     //
@@ -1400,19 +1401,19 @@ var UIDialog = function(){
     this.height = 240;
     
     var templeft,temptop,tempheight
-    var cssText,bodycssText;//拼出dialog和dialogbody的样式字符串
+    var cssText,bodycssText;
     templeft = (document.body.clientWidth-this.width)/2;
     temptop = (document.body.clientHeight-this.height)/2;
     tempheight= this.height-30;
     cssText= "position:absolute;background:#65c294;padding:1px;border:4px;top:"+temptop+"px;left:"+templeft+"px;height:"+this.height+"px;width:"+this.width+"px;";
     bodycssText = "width:100%;background:#ffffff;"+"height:" + tempheight + "px;";
     this.dom.style.cssText = cssText;
-    titlebar.style.cssText = "height:30px;width:100%;background:url(editor/images/titlebar.png) repeat;cursor:move;";
+    titlebar.style.cssText = "height:30px;width:100%;background:url(./images/titlebar.png) no-repeat;cursor:move;";
     body.style.cssText  = bodycssText;
-    titleimg.style.cssText = "float:left;height:20px;width:20px;background:url(editor/images/icon.png);"+"display:block;margin:4px;line-height:20px;";
-    title.style.cssText = "font-size:16px;float:left;display:block;margin:4px;line-height:20px;";
+    titleimg.style.cssText = "float:left;height:20px;width:20px;background:url(./images/icon.png) no-repeat;"+"display:block;margin:4px;line-height:20px;";
+    titletxt.style.cssText = "font-size:16px;float:left;display:block;margin:4px;line-height:20px;";
     titleclose.style.cssText  = "float:right;display:block;margin:4px;line-height:20px;";
-    closeaction.style.cssText = "height:20px;width:24px;border-width:1px;"+"background-image:url(editor/images/close.png);cursor:pointer;";
+    closeaction.style.cssText = "height:20px;width:24px;border-width:1px;background-image:url(./images/close.png);cursor:pointer;";
     
     var left = parseInt(this.dom.style.left);
     this.left = left;
@@ -1426,14 +1427,15 @@ var UIDialog = function(){
     var OnMouseMove = function(event){
         dom.style.top = event.clientY - downY + top + "px";
         dom.style.left = event.clientX - downX + left + "px";
-        //alert(top+','+left);
     }
     
     var OnMouseUp = function(event){
-        dom.style.top = event.clientY - downY + top + "px";
-        dom.style.left = event.clientX - downX + left + "px";
         document.removeEventListener("mousemove",OnMouseMove,false);
         document.removeEventListener("mouseup",OnMouseUp,false);
+        dom.style.top = event.clientY - downY + top + "px";
+        dom.style.left = event.clientX - downX + left + "px";
+        top = parseInt(dom.style.top);
+        left = parseInt(dom.style.left);
     }
     
     var OnMouseDown = function(event){
@@ -1457,7 +1459,7 @@ UIDialog.prototype.mask = function(){
 }
 
 UIDialog.prototype.setTitle = function( title ){
-    this.title.innerHTML = title;
+    this.titletxt.innerHTML = title;
 }
 
 UIDialog.prototype.setBody = function( body ){

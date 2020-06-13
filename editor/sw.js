@@ -6,6 +6,10 @@ const assets = [
 	'../files/favicon.ico',
 
 	'../build/three.module.js',
+    
+    './images/close.png'
+    './images/icon.png'
+    './images/titlebar.png'
 
 	'../examples/jsm/controls/TransformControls.js',
 
