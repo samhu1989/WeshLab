@@ -1392,12 +1392,6 @@ var UIDialog = function(){
     dom.appendChild(titlebar);
     dom.appendChild(body);
     this.body = body;
-    var ismousedown = false;
-    this.ismousedown = ismousedown;
-    var left = parseInt(this.dom.style.left);
-    this.left = left;
-    var top = parseInt(this.dom.style.top);
-    this.top = top;
     var downX = 0;
     this.downX = downX;
     var downY = 0;
@@ -1420,27 +1414,29 @@ var UIDialog = function(){
     titleclose.style.cssText  = "float:right;display:block;margin:4px;line-height:20px;";
     closeaction.style.cssText = "height:20px;width:24px;border-width:1px;"+"background-image:url(editor/images/close.png);cursor:pointer;";
     
+    var left = parseInt(this.dom.style.left);
+    this.left = left;
+    var top = parseInt(this.dom.style.top);
+    this.top = top;
     
     var OnClose = function(event){
         dom.parentNode.removeChild(dom);
     }
     
     var OnMouseMove = function(event){
-        if(ismousedown){
-            dom.style.top = event.clientY - downY + top + "px";
-            dom.style.left = event.clientX - downX + left + "px";
-        }
+        dom.style.top = event.clientY - downY + top + "px";
+        dom.style.left = event.clientX - downX + left + "px";
+        //alert(top+','+left);
     }
     
     var OnMouseUp = function(event){
-        if(ismousedown){
-            dom.style.top = event.clientY - downY + top + "px";
-            dom.style.left = event.clientX - downX + left + "px";
-        }
+        dom.style.top = event.clientY - downY + top + "px";
+        dom.style.left = event.clientX - downX + left + "px";
+        document.removeEventListener("mousemove",OnMouseMove,false);
+        document.removeEventListener("mouseup",OnMouseUp,false);
     }
     
     var OnMouseDown = function(event){
-        ismousedown = true;
         downX = event.clientX;
         downY = event.clientY;
         document.addEventListener("mousemove",OnMouseMove,false);
@@ -1450,7 +1446,7 @@ var UIDialog = function(){
     titlebar.addEventListener("mousedown",OnMouseDown,false);
     closeaction.addEventListener("click",OnClose,false);
     document.body.appendChild(dom);
-	return this;
+    return this;
 }
 
 UIDialog.prototype = Object.create( UIElement.prototype );
@@ -1462,6 +1458,10 @@ UIDialog.prototype.mask = function(){
 
 UIDialog.prototype.setTitle = function( title ){
     this.title.innerHTML = title;
+}
+
+UIDialog.prototype.setBody = function( body ){
+    this.body.appendChild(body);
 }
 
 export { UIElement, UISpan, UIDiv, UIRow, UIPanel, UIText, UIInput, UITextArea, UISelect, UICheckbox, UIColor, UINumber, UIInteger, UIBreak, UIHorizontalRule, UIButton, UITabbedPanel, UIListbox, UIDialog };
