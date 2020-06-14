@@ -1375,6 +1375,11 @@ var UIDialog = function(){
 	dom.className = 'Dialog';
 	this.dom = dom;
     //
+    var mask = document.createElement("div");
+    var maskCssText = "background-color:#9D9D9D;width:100%;height:100%;left:0;top:0;filter:alpha(opacity=50);opacity:0.5;z-index:9;position:absolute;";
+    mask.style.cssText = maskCssText;
+    this.mask = mask;
+    //
     var titlebar= document.createElement("div");
     this.titlebar = titlebar;
     var titletxt = document.createElement("span");
@@ -1405,15 +1410,15 @@ var UIDialog = function(){
     templeft = (document.body.clientWidth-this.width)/2;
     temptop = (document.body.clientHeight-this.height)/2;
     tempheight= this.height-30;
-    cssText= "position:absolute;background:#65c294;padding:1px;border:4px;top:"+temptop+"px;left:"+templeft+"px;height:"+this.height+"px;width:"+this.width+"px;";
+    cssText= "position:absolute;background:#dddddd;padding:1px;border:4px;top:"+temptop+"px;left:"+templeft+"px;height:"+this.height+"px;width:"+this.width+"px;z-index:10";
     bodycssText = "width:100%;background:#ffffff;"+"height:" + tempheight + "px;";
     this.dom.style.cssText = cssText;
     titlebar.style.cssText = "height:30px;width:100%;background:url(./images/titlebar.png) no-repeat;cursor:move;";
     body.style.cssText  = bodycssText;
-    titleimg.style.cssText = "float:left;height:20px;width:20px;background:url(./images/icon.png) no-repeat;"+"display:block;margin:4px;line-height:20px;";
+    titleimg.style.cssText = "float:left;height:20px;width:20px;background:url(./images/icon.png) no-repeat;background-size:100% 100%;display:block;margin:4px;line-height:20px;";
     titletxt.style.cssText = "font-size:16px;float:left;display:block;margin:4px;line-height:20px;";
     titleclose.style.cssText  = "float:right;display:block;margin:4px;line-height:20px;";
-    closeaction.style.cssText = "height:20px;width:24px;border-width:1px;background-image:url(./images/close.png);cursor:pointer;";
+    closeaction.style.cssText = "height:20px;width:24px;border-width:1px;background:url(./images/close.png) no-repeat;background-size:100% 100%;cursor:pointer;";
     
     var left = parseInt(this.dom.style.left);
     this.left = left;
@@ -1422,6 +1427,9 @@ var UIDialog = function(){
     
     var OnClose = function(event){
         dom.parentNode.removeChild(dom);
+        if(mask.parentNode != null){
+            mask.parentNode.removeChild(mask);
+        }
     }
     
     var OnMouseMove = function(event){
@@ -1454,8 +1462,8 @@ var UIDialog = function(){
 UIDialog.prototype = Object.create( UIElement.prototype );
 UIDialog.prototype.constructor = UIDialog;
 
-UIDialog.prototype.mask = function(){
-    
+UIDialog.prototype.addMask = function(){
+    document.body.appendChild(this.mask);
 }
 
 UIDialog.prototype.setTitle = function( title ){
